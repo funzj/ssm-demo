@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <mvc:resources location="/static/" mapping="/static/**"/>
+
+  <!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器,不扫描Service，使用Spring中的Service -->
+  <context:component-scan base-package="com.funzj.**.web">
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+  </context:component-scan>
+  <!-- 处理器映射器 -->
+  <mvc:annotation-driven>
+    <mvc:message-converters register-defaults="true">
+      <bean id="fastJsonHttpMessageConverter"
+        class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <property name="charset" value="UTF-8"/>
+        <property name="supportedMediaTypes">
+          <list>
+            <!-- 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 -->
+            <value>text/html;charset=UTF-8</value>
+            <value>text/json;charset=UTF-8</value>
+            <value>application/json;charset=UTF-8</value>
+          </list>
+        </property>
+      </bean>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+  <!-- 引入静态资源 -->
+  <mvc:default-servlet-handler/>
+
+  <!-- 视图解析器（ViewResolver）配置 -->
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!-- 前缀 -->
+    <property name="prefix" value="/WEB-INF/pages/"/>
+    <!-- 后缀 -->
+    <property name="suffix" value=".jsp"/>
+    <!-- 指定视图解析器的优先级,值越小优先级越高,默认为最大值,所以这里可以不配置 ←_← -->
+    <property name="order" value="2"/>
+  </bean>
+
+  <!-- 添加Freemarker解析器 -->
+  <!-- Freemarker配置 -->
+  <bean id="freemarkerConfig"
+    class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+    <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+    <property name="defaultEncoding" value="utf-8"/>
+    <property name="freemarkerSettings">
+      <props>
+        <prop key="template_update_delay">10</prop>
+        <prop key="locale">zh_CN</prop>
+        <prop key="datetime_format">yyyy-MM-dd</prop>
+        <prop key="date_format">yyyy-MM-dd</prop>
+        <prop key="number_format">#.##</prop>
+      </props>
+    </property>
+  </bean>
+  <!-- 视图解析器（ViewResolver）配置 -->
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+    <property name="suffix" value=".ftl"/>
+    <property name="contentType" value="text/html;charset=utf-8"/>
+    <property name="exposeRequestAttributes" value="true"/>
+    <property name="exposeSessionAttributes" value="true"/>
+    <property name="exposeSpringMacroHelpers" value="true"/>
+    <property name="requestContextAttribute" value="request"/>
+    <property name="order" value="1"/>
+  </bean>
+</beans>
