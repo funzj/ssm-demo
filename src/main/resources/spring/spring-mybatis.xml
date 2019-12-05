@@ -74,7 +74,7 @@
     <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
      -->
     <!-- 配置包别名 -->
-    <property name="typeAliasesPackage" value="com.ecenter.model"/>
+    <property name="typeAliasesPackage" value="com.funzj.model"/>
     <property name="plugins">
       <array>
         <!-- 分页插件配置 -->
@@ -151,7 +151,7 @@
 
   <!-- 配置切面 -->
   <aop:config>
-    <aop:pointcut id="transactionPointcut" expression="execution(* com.ecenter.service.impl.*.*(..))"/>
+    <aop:pointcut id="transactionPointcut" expression="execution(* com.funzj.service.impl.*.*(..))"/>
     <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
   </aop:config>
 
