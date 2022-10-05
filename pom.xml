@@ -42,7 +42,7 @@
     <fastjson.version>1.2.47</fastjson.version>
     <druid.version>1.1.10</druid.version>
 
-    <jackson.version>2.10.1</jackson.version>
+    <jackson.version>2.12.6.1</jackson.version>
 
     <!-- plugin versions -->
     <plugin.maven-compiler>3.1</plugin.maven-compiler>
